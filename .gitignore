@@ -1,2 +1,4 @@
 *.tar.gz
 .DS_STORE
+.vscode
+aclImdb/
