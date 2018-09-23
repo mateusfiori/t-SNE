@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 #shape -> [10000, 1]
 comments = pd.read_csv("./comments.csv").values
@@ -16,13 +18,20 @@ print("BOW done...\n")
 
 print("Waiting for TSVD")
 #TruncatedSVD - dimensionality reduction for sparse data
-tSVD = TruncatedSVD(n_components=50)
+tSVD = TruncatedSVD(n_components=100)
 dec_x = tSVD.fit_transform(X)
 print("TSVD done...\n")
 
 print("Waiting for T-SNE...")
 #t-SNE
-X_embedded = TSNE(n_components=3, verbose=1).fit_transform(dec_x)
+X_embedded = TSNE(n_components=3, verbose=1, learning_rate=500.0).fit_transform(dec_x)
 print("T-SNE done...\n")
+
+#plotting
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+ax.scatter(X_embedded[:, 0], X_embedded[:, 1], X_embedded[:, 2])
+plt.show()
 
 print(X_embedded)
